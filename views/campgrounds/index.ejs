@@ -1,0 +1,39 @@
+<%- layout('layouts/boilerplate') %>
+
+<h1 class="text-center mt-3">INDEX</h1>
+
+<div id="map" style="width: auto; height: 600px" class="rounded-3 my-3 border"></div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+   <% for (camp of camps.reverse()) { %>
+   <div class="col">
+      <div class="card">
+         <% if (camp.images.length) {%>
+         <img class="card-img-top" src="<%= camp.images[0].thumbnail %>" alt="" />
+         <% } %>
+         <div class="card-body">
+            <h3><%= camp.title %></h3>
+            <p><%= camp.description %></p>
+            <div class="d-flex justify-content-between align-items-center">
+               <div class="btn-group">
+                  <a class="btn btn-primary" href="/campgrounds/<%= camp._id %>">Details</a>
+                  <a class="btn btn-secondary" href="/campgrounds/<%= camp._id %>/edit">Edit</a>
+                  <button class="btn btn-danger" form="frm-delete" type="submit">Delete</button>
+               </div>
+               <div class="text-muted">By: <%= camp.poster.username %></div>
+            </div>
+            <form
+               id="frm-delete"
+               action="/campgrounds/<%= camp.id %>?_method=DELETE"
+               method="POST"
+            ></form>
+         </div>
+      </div>
+   </div>
+   <% } %>
+</div>
+<script>
+   const mapToken = "<%-process.env.MAPBOX_TOKEN%>"
+   const campgrounds = {features: <%-JSON.stringify(camps)%>}
+</script>
+<script src="/cluster.js"></script>
